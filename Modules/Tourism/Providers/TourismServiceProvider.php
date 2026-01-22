@@ -36,6 +36,7 @@ class TourismServiceProvider extends ServiceProvider
         if (class_exists('Livewire\Livewire')) {
             \Livewire\Livewire::component('modules.tourism.livewire.frontend.index', \Modules\Tourism\Livewire\Frontend\Index::class);
             \Livewire\Livewire::component('modules.tourism.livewire.frontend.show', \Modules\Tourism\Livewire\Frontend\Show::class);
+            \Livewire\Livewire::component('tourism::frontend.review-section', \Modules\Tourism\Livewire\Frontend\ReviewSection::class);
         }
     }
 
