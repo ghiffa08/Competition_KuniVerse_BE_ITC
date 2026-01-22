@@ -108,6 +108,18 @@ if (! function_exists('show_column_value')) {
 
             return $datetime->isoFormat('LL');
         }
+                if (in_array($column_name, ['image', 'image_url', 'img_url', 'thumbnail', 'feature_image'])) {
+            return '
+                <a href="'.asset('storage/'.$value).'" data-lightbox="image">
+                    <img
+                        src="'.asset('storage/'.$value).'"
+                        class="img-thumbnail"
+                        style="max-height:250px;"
+                        alt="image"
+                    >
+                </a>
+            ';
+        }
         if (($column_type === 'datetime' || $column_type === 'timestamp') && $value !== '') {
             $datetime = Carbon::parse($value);
 

@@ -5,5 +5,7 @@
     "Menu": true,
     "Tourism": true,
     "Booking": true,
-    "Culinary": true
+    "Culinary": true,
+    "ProductCategory": true,
+    "Umkm": true
 }

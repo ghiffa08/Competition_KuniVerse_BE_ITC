@@ -5,6 +5,7 @@
     "module_title" => "",
     "module_icon" => "",
     "module_action" => "",
+    "selectOptions" => [],
 ])
 <div class="card">
     @if ($slot != "")
