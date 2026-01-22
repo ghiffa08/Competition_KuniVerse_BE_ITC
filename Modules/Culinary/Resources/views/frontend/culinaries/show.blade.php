@@ -95,7 +95,7 @@
                     <label class="text-sm font-medium block mb-2">Tanggal</label>
                     <div class="flex items-center gap-2 border rounded-lg px-3 py-2 mb-4">
                         <span class="material-symbols-outlined text-gray-400">calendar_today</span>
-                        <input type="date" class="w-full outline-none text-sm bg-transparent" />
+                        <input type="date" min="{{ date('Y-m-d') }}" x-model="bookingDate" class="w-full outline-none text-sm bg-transparent" />
                     </div>
 
                     <label class="text-sm font-medium block mb-2">Jumlah Orang</label>
@@ -155,7 +155,7 @@
                 </div>
 
                 <template x-if="mode === 'booking'">
-                    <button class="w-full bg-[#C49A5C] text-white py-3 rounded-xl font-semibold hover:bg-[#b08b52] transition-colors shadow-lg">
+                    <button @click="goToBookingCheckout" class="w-full bg-[#C49A5C] text-white py-3 rounded-xl font-semibold hover:bg-[#b08b52] transition-colors shadow-lg">
                          Booking Meja
                     </button>
                 </template>
@@ -193,6 +193,7 @@
             activeCategory: 'makanan',
             mode: 'booking', // booking or delivery
             people: 2,
+            bookingDate: '',
             cart: [],
             map: null,
             init() {
@@ -259,7 +260,20 @@
             goToCheckout() {
                 if (this.cart.length === 0) return alert("Pilih menu dulu!");
                 localStorage.setItem('culinary_cart', JSON.stringify(this.cart));
-                window.location.href = "{{ route('frontend.culinaries.checkout', $$module_name_singular->id) }}";
+                localStorage.removeItem('culinary_booking');
+                window.location.href = "{{ route('frontend.culinaries.checkout', $$module_name_singular->id) }}?mode=delivery";
+            },
+            goToBookingCheckout() {
+                if (this.cart.length === 0) return alert("Pilih menu dulu untuk booking!");
+                if (!this.bookingDate) return alert("Silakan pilih tanggal booking!");
+                if (!this.people || this.people < 1) return alert("Jumlah orang tidak valid");
+
+                localStorage.setItem('culinary_cart', JSON.stringify(this.cart));
+                localStorage.setItem('culinary_booking', JSON.stringify({
+                    date: this.bookingDate,
+                    people: this.people
+                }));
+                window.location.href = "{{ route('frontend.culinaries.checkout', $$module_name_singular->id) }}?mode=dine_in";
             }
         }
     }

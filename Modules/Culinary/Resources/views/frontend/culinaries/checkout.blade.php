@@ -23,17 +23,26 @@
         <!-- LEFT: Delivery Details -->
         <div class="lg:col-span-2 space-y-6">
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                <h2 class="text-xl font-serif font-semibold mb-4">Delivery Location</h2>
+                <h2 class="text-xl font-serif font-semibold mb-4" x-text="mode === 'delivery' ? 'Delivery Location' : 'Contact Details'"></h2>
                 
-                <div class="mb-4">
+                <div x-show="mode === 'dine_in'" class="mb-6 bg-[#C49A5C]/10 p-4 rounded-xl border border-[#C49A5C]/20">
+                    <h3 class="font-semibold text-[#8B6B3D] mb-2 flex items-center gap-2">
+                        <span class="material-symbols-outlined">restaurant</span>
+                        Booking Summary
+                    </h3>
+                    <div class="flex flex-col sm:flex-row sm:gap-8 text-sm text-gray-700">
+                        <p class="flex items-center gap-2"><span class="material-symbols-outlined text-gray-400 text-lg">calendar_today</span> <span x-text="bookingInfo ? bookingInfo.date : '-'"></span></p>
+                        <p class="flex items-center gap-2"><span class="material-symbols-outlined text-gray-400 text-lg">group</span> <span x-text="bookingInfo ? bookingInfo.people : '-'"></span> Pax</p>
+                    </div>
+                </div>
+
+                <div class="mb-4" x-show="mode === 'delivery'">
                     <label class="block text-sm font-medium mb-1">Pin Location (For Courier finding your house)</label>
                     <div id="delivery-map" class="mb-2 shadow-inner"></div>
                     <p class="text-xs text-gray-500">Drag marker to adjust address text</p>
                 </div>
 
-
-
-                <div class="form-group mb-4">
+                <div class="form-group mb-4" x-show="mode === 'delivery'">
                     <label class="block text-sm font-medium mb-1">Full Address</label>
                     <textarea x-model="form.address" class="w-full border rounded-lg p-3 text-sm focus:ring-[#C49A5C] focus:border-[#C49A5C]" rows="3" placeholder="Street name, house number, details..."></textarea>
                 </div>
@@ -55,7 +64,7 @@
             </div>
 
             <!-- Shipping Options -->
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100" x-show="rates.length > 0">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100" x-show="mode === 'delivery' && rates.length > 0">
                 <h2 class="text-xl font-serif font-semibold mb-4">Select Shipping</h2>
                 <!-- RajaOngkir often returns couriers separately, but we will flat map them for UI -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -84,7 +93,7 @@
             </div>
             
             <!-- Auto-Calculate Active -->
-            <div x-show="rates.length === 0 && selectedDestinationId && !isLoading" class="bg-blue-50 p-4 rounded-xl text-center text-sm text-blue-600">
+            <div x-show="mode === 'delivery' && rates.length === 0 && selectedDestinationId && !isLoading" class="bg-blue-50 p-4 rounded-xl text-center text-sm text-blue-600">
                 <p>Calculating rates available...</p>
                  <button @click="checkRates" class="text-xs text-blue-500 hover:underline mt-2">Retry</button>
             </div>
@@ -122,8 +131,8 @@
 
                 <button @click="processPayment" 
                     :disabled="!isValidOrder"
-                    class="w-full bg-[#C49A5C] text-white py-3 rounded-xl font-semibold hover:bg-[#b08b52] transition-colors shadow-lg disabled:opacity-50 disabled:cursor-not-allowed">
-                    PAY NOW
+                    class="w-full bg-[#C49A5C] text-white py-3 rounded-xl font-semibold hover:bg-[#b08b52] transition-colors shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                    x-text="mode === 'dine_in' ? 'CONFIRM BOOKING' : 'PAY NOW'">
                 </button>
             </div>
         </div>
@@ -190,8 +199,12 @@
         // Define map and marker outside of the Alpine data object to avoid Proxy reactivity issues
         let map = null;
         let marker = null;
+        const params = new URLSearchParams(window.location.search);
+        const mode = params.get('mode') || 'delivery';
 
         return {
+            mode: mode,
+            bookingInfo: null,
             culinaryId: {{ $culinary->id }},
             restaurantLat: {{ $culinary->latitude ?? -6.966667 }},
             restaurantLng: {{ $culinary->longitude ?? 108.466667 }},
@@ -227,10 +240,20 @@
                     window.location.href = "{{ route('frontend.culinaries.show', $culinary->id) }}";
                 }
 
-                // Init Map
-                this.$nextTick(() => {
-                    this.initMap();
-                });
+                if (this.mode === 'dine_in') {
+                    const booking = localStorage.getItem('culinary_booking');
+                    if (booking) {
+                        this.bookingInfo = JSON.parse(booking);
+                    } else {
+                        alert('Booking info missing!');
+                        window.location.href = "{{ route('frontend.culinaries.show', $culinary->id) }}";
+                    }
+                } else {
+                    // Init Map only for delivery
+                    this.$nextTick(() => {
+                        this.initMap();
+                    });
+                }
             },
 
             async searchDestination() {
@@ -272,6 +295,9 @@
             },
 
             get isValidOrder() {
+                if (this.mode === 'dine_in') {
+                    return this.cart.length > 0 && this.bookingInfo && this.form.name && this.form.phone && this.form.email;
+                }
                 return this.cart.length > 0 && this.selectedCourier && this.form.name && this.form.phone && this.form.email && this.form.address;
             },
 
@@ -514,6 +540,29 @@
                 if (!this.isValidOrder) return;
                 const self = this;
                 
+                const payload = {
+                    culinary_id: this.culinaryId,
+                    customer_name: this.form.name,
+                    customer_phone: this.form.phone,
+                    customer_email: this.form.email,
+                    total_price: this.subtotal,
+                    items: this.cart,
+                    type: this.mode
+                };
+
+                if (this.mode === 'delivery') {
+                    payload.delivery_address = this.form.address;
+                    payload.dest_lat = this.form.lat;
+                    payload.dest_lng = this.form.lng;
+                    payload.delivery_cost = this.deliveryFee;
+                    payload.courier_name = this.selectedCourier.code;
+                    payload.courier_service = this.selectedCourier.service;
+                    payload.courier_desc = 'Standard';
+                } else {
+                    payload.booking_date = this.bookingInfo.date;
+                    payload.people_count = this.bookingInfo.people;
+                }
+                
                 try {
                     const response = await fetch("{{ route('frontend.culinaries.store_order') }}", {
                         method: 'POST',
@@ -522,21 +571,7 @@
                             'Accept': 'application/json',
                             'X-CSRF-TOKEN': '{{ csrf_token() }}'
                         },
-                        body: JSON.stringify({
-                            culinary_id: this.culinaryId,
-                            customer_name: this.form.name,
-                            customer_phone: this.form.phone,
-                            customer_email: this.form.email,
-                            delivery_address: this.form.address,
-                            dest_lat: this.form.lat,
-                            dest_lng: this.form.lng,
-                            delivery_cost: this.deliveryFee,
-                            total_price: this.subtotal,
-                            items: this.cart,
-                            courier_name: this.selectedCourier.code,
-                            courier_service: this.selectedCourier.service,
-                            courier_desc: 'Standard'
-                        })
+                        body: JSON.stringify(payload)
                     });
 
                     const result = await response.json();

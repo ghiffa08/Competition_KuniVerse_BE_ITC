@@ -43,6 +43,12 @@ class Tourism extends BaseModel
         'price' => 'double',
     ];
 
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
+
     /**
      * Create a new factory instance for the model.
      *

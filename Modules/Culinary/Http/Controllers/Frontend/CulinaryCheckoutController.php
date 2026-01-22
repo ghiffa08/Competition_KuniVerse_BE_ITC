@@ -164,40 +164,56 @@ class CulinaryCheckoutController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $type = $request->input('type', 'delivery');
+
+        $rules = [
             'culinary_id' => 'required|exists:culinaries,id',
             'customer_name' => 'required|string',
             'customer_phone' => 'required|string',
             'customer_email' => 'required|email',
-            'delivery_address' => 'required|string',
-            'delivery_cost' => 'required|numeric',
             'total_price' => 'required|numeric',
             'items' => 'required|array',
-            'courier_name' => 'required|string',
-            'courier_service' => 'required|string',
-        ]);
+            'type' => 'nullable|string|in:delivery,dine_in',
+        ];
+
+        if ($type === 'delivery') {
+            $rules['delivery_address'] = 'required|string';
+            $rules['delivery_cost'] = 'required|numeric';
+            $rules['courier_name'] = 'required|string';
+            $rules['courier_service'] = 'required|string';
+        } else {
+             $rules['booking_date'] = 'required|date';
+             $rules['people_count'] = 'required|integer|min:1';
+             $rules['delivery_cost'] = 'nullable|numeric'; // Allow explicit 0 or null
+        }
+
+        $request->validate($rules);
 
         DB::beginTransaction();
         try {
             $culinary = Culinary::findOrFail($request->culinary_id);
-            $grandTotal = $request->total_price + $request->delivery_cost;
+            $deliveryCost = $request->delivery_cost ?? 0;
+            $grandTotal = $request->total_price + $deliveryCost;
             $invoice = 'INV/CUL/' . date('Ymd') . '/' . rand(1000, 9999);
 
             $order = CulinaryOrder::create([
                 'user_id' => auth()->id(), // null if guest
                 'culinary_id' => $culinary->id,
                 'invoice_number' => $invoice,
+                'type' => $type,
+                'booking_date' => $request->booking_date,
+                'people_count' => $request->people_count,
                 'customer_name' => $request->customer_name,
                 'customer_phone' => $request->customer_phone,
                 'customer_email' => $request->customer_email,
-                'delivery_address' => $request->delivery_address,
+                'delivery_address' => $request->delivery_address, // Nullable for dine_in
                 'delivery_latitude' => null, 
                 'delivery_longitude' => null,
                 'courier_name' => $request->courier_name,
                 'courier_service' => $request->courier_service,
                 'courier_description' => $request->courier_desc,
                 'total_price' => $request->total_price,
-                'delivery_fee' => $request->delivery_cost,
+                'delivery_fee' => $deliveryCost,
                 'grand_total' => $grandTotal,
                 'payment_status' => 'pending',
                 'order_status' => 'pending'

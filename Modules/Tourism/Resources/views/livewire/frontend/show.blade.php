@@ -140,6 +140,9 @@
             </div>
         @endif
 
+        {{-- ===== REVIEWS ===== --}}
+        <livewire:tourism::frontend.review-section :tourism="$tourism" />
+
          <div class="max-w-4xl mx-auto mt-12 pt-8 border-t border-gray-100 text-center">
              <a href="{{ route('frontend.wisata.index') }}" wire:navigate class="inline-flex items-center gap-2 text-gray-500 hover:text-prestige-gold transition font-medium">
                  <span class="material-symbols-outlined">arrow_back</span>
