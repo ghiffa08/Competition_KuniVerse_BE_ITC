@@ -105,7 +105,7 @@
                {{-- Google Login --}}
                @if (env('GOOGLE_CLIENT_ID'))
                    <a :href="'{{ route('social.login', 'google') }}?role=' + $wire.role" class="w-full flex justify-center items-center py-3 rounded-xl bg-white border border-gray-200 hover:bg-gray-50 hover:shadow transition font-semibold text-gray-700">
-                       <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5 mr-2" alt="Google logo">
+                   <img src="https://developers.google.com/identity/images/g-logo.png" class="w-5 h-5 mr-2" alt="Google logo" />
                        Sign in with Google
                    </a>
                @endif
