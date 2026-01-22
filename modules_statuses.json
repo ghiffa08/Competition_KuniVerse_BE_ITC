@@ -1,0 +1,9 @@
+{
+    "Post": true,
+    "Category": true,
+    "Tag": true,
+    "Menu": true,
+    "Tourism": true,
+    "Booking": true,
+    "Culinary": true
+}

@@ -1,0 +1,13 @@
+{
+    "name": "Tourism",
+    "alias": "tourism",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Tourism\\Providers\\TourismServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

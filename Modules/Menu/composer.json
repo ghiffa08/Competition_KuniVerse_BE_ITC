@@ -1,0 +1,21 @@
+{
+    "name": "ghiffa08/menu",
+    "description": "",
+    "type": "laravel-module",
+    "authors": [
+        {
+            "name": "Ghiffa08"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {}
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Menu\\": ""
+        }
+    }
+}

@@ -1,0 +1,13 @@
+{
+    "name": "Culinary",
+    "alias": "culinary",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Culinary\\Providers\\CulinaryServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

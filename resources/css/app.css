@@ -1,0 +1,153 @@
+@import 'tailwindcss';
+@import '../../vendor/livewire/flux/dist/flux.css';
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Inter:wght@300;400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap");
+
+@source "../views";
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../vendor/livewire/flux-pro/stubs/**/*.blade.php';
+@source '../../vendor/livewire/flux/stubs/**/*.blade.php';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
+    --color-zinc-50: #fafafa;
+    --color-zinc-100: #f5f5f5;
+    --color-zinc-200: #e5e5e5;
+    --color-zinc-300: #d4d4d4;
+    --color-zinc-400: #a3a3a3;
+    --color-zinc-500: #737373;
+    --color-zinc-600: #525252;
+    --color-zinc-700: #404040;
+    --color-zinc-800: #262626;
+    --color-zinc-900: #171717;
+    --color-zinc-950: #0a0a0a;
+
+    --color-accent: var(--color-neutral-800);
+    --color-accent-content: var(--color-neutral-800);
+    --color-accent-foreground: var(--color-white);
+
+    /* Kuniverse Colors */
+    --color-forest: #0b2b26;
+    --color-prestige-gold: #c5a059;
+    --color-ethereal-white: #f8f9fa;
+
+    /* Kuniverse Fonts */
+    --font-serif: "Playfair Display", serif;
+    /* Overwriting sans or keeping both? Let's add Inter to the start of the list if we want it to check first, but the other one 'Instrument Sans' is existing. I'll just leave sans as is or user might get angry I changed global font. 
+       The React app used: --font-sans: "Inter", sans-serif;
+       I will just add it to the theme but maybe not override the default --font-sans unless necessary. 
+       Actually, I will override it for the sections I am pasting by using font-sans utility which will use this variable. 
+       I'll update the --font-sans variable to include Inter at the beginning.
+    */
+    --font-sans: "Inter", 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+@layer theme {
+    .dark {
+        --color-accent: var(--color-white);
+        --color-accent-content: var(--color-white);
+        --color-accent-foreground: var(--color-neutral-800);
+    }
+}
+
+@layer base {
+
+    *,
+    ::after,
+    ::before,
+    ::backdrop,
+    ::file-selector-button {
+        border-color: var(--color-gray-200, currentColor);
+    }
+}
+
+[data-flux-field] {
+    @apply grid gap-2;
+}
+
+[data-flux-label] {
+    @apply !mb-0 !leading-tight;
+}
+
+input:focus[data-flux-control],
+textarea:focus[data-flux-control],
+select:focus[data-flux-control] {
+    @apply outline-hidden ring-2 ring-accent ring-offset-2 ring-offset-accent-foreground;
+}
+
+/* \[:where(&)\]:size-4 {
+    @apply size-4;
+} */
+
+/* ================== COMPONENTS ================== */
+@layer components {
+    .glass-crystal {
+        @apply bg-white/30 backdrop-blur-xl border border-white/30;
+        box-shadow: 0 8px 32px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    .portal-circle {
+        @apply relative size-24 md:size-32 rounded-full overflow-hidden border-2 border-prestige-gold/30 hover:border-prestige-gold transition-all duration-500 cursor-pointer;
+    }
+
+    .portal-preview {
+        @apply absolute inset-0 bg-cover bg-center scale-110 group-hover:scale-100 transition-transform duration-700;
+    }
+}
+
+/* ================== UTILITIES ================== */
+.material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 300, "GRAD" 0, "opsz" 24;
+}
+
+.split-bg {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.scroll-indicator {
+    animation: bounce 2s infinite;
+}
+
+/* ================== ANIMATION ================== */
+@keyframes bounce {
+
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
+        transform: translateY(0);
+    }
+
+    40% {
+        transform: translateY(-10px);
+    }
+
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in {
+    animation: fade-in 0.25s ease-out;
+}
