@@ -78,19 +78,15 @@ return [
     |
     */
 
-    'locale' => env('APP_LOCALE', 'en'),
+    'locale' => env('APP_LOCALE', 'id'),
 
     'fallback_locale' => env('APP_FALLBACK_LOCALE', 'en'),
 
-    'faker_locale' => env('APP_FAKER_LOCALE', 'en_US'),
+    'faker_locale' => env('APP_FAKER_LOCALE', 'id_ID'),
 
     'available_locales' => [
-        'ar' => 'العربی (AR)',
-        'bn' => 'বাংলা (BN)',
+        'id' => 'Bahasa Indonesia (ID)',
         'en' => 'English (EN)',
-        'fa' => 'فارسی (FA)',
-        'tr' => 'Türkçe (TR)',
-        'vi' => 'Vietnamese (VI)',
     ],
 
     /*
