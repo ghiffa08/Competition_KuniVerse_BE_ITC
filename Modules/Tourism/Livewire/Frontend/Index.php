@@ -22,7 +22,7 @@ class Index extends Component
     #[Title('Wisata - Kuniverse')]
     public function render()
     {
-        $tourisms = Tourism::where('status', 1)
+        $tourisms = Tourism::query()
             ->when($this->search, function ($query) {
                 $query->where('name', 'like', '%'.$this->search.'%')
                     ->orWhere('intro', 'like', '%'.$this->search.'%');

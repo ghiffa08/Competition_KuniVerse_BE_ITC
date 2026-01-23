@@ -185,3 +185,4 @@ Route::group(['prefix' => 'admin', 'as' => 'backend.', 'middleware' => ['auth', 
 Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth', 'can:view_backend']], function () {
     \UniSharp\LaravelFilemanager\Lfm::routes();
 });
+Route::get('debug-tourism', function() { return \Modules\Tourism\Models\Tourism::all(); });

@@ -74,7 +74,7 @@ class DatabaseSeeder extends Seeder
      */
     protected function callDummyDataSeeders(): void
     {
-        $dummyDataModules = ['Post', 'Category', 'Tag'];
+        $dummyDataModules = ['Post', 'Category', 'Tag', 'Tourism', 'Culinary', 'UMKM'];
 
         foreach ($dummyDataModules as $moduleName) {
             $this->callModuleSeeder($moduleName);
