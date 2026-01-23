@@ -50,7 +50,7 @@ Route::group(['namespace' => '\Modules\Post\Http\Controllers\Backend', 'as' => '
 
     /*
      *
-     *  Backend Posts Routes
+     *  Backend Posts Routess
      *
      * ---------------------------------------------------------------------
      */
