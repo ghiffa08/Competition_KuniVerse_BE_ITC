@@ -1,12 +1,12 @@
 <?php
 
-namespace Modules\Post\Http\Controllers\Frontend;
+namespace Modules\UMKM\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
 use Illuminate\Support\Str;
 
-class PostsController extends Controller
+class UMKMSController extends Controller
 {
     public $module_title;
 
@@ -21,19 +21,19 @@ class PostsController extends Controller
     public function __construct()
     {
         // Page Title
-        $this->module_title = 'Posts';
+        $this->module_title = 'UMKMS';
 
         // module name
-        $this->module_name = 'posts';
+        $this->module_name = 'umkms';
 
         // directory path of the module
-        $this->module_path = 'post::frontend';
+        $this->module_path = 'umkm::frontend';
 
         // module icon
         $this->module_icon = 'fa-regular fa-sun';
 
         // module model name, path
-        $this->module_model = "Modules\Post\Models\Post";
+        $this->module_model = "Modules\UMKM\Models\UMKM";
     }
 
     /**
@@ -52,7 +52,7 @@ class PostsController extends Controller
 
         $module_action = 'List';
 
-        $$module_name = $module_model::published()->latest()->with('category', 'tags')->paginate();
+        $$module_name = $module_model::where('status', 1)->latest()->paginate(9);
 
         return view(
             "$module_path.$module_name.index",
@@ -63,13 +63,11 @@ class PostsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  string  $slug
      * @return Response
      */
-    public function show($id)
+    public function show($slug)
     {
-        $id = decode_id($id);
-
         $module_title = $this->module_title;
         $module_name = $this->module_name;
         $module_path = $this->module_path;
@@ -79,7 +77,7 @@ class PostsController extends Controller
 
         $module_action = 'Show';
 
-        $$module_name_singular = $module_model::whereId($id)->with('category', 'tags')->first();
+        $$module_name_singular = $module_model::where('slug', $slug)->where('status', 1)->firstOrFail();
 
         return view(
             "$module_path.$module_name.show",

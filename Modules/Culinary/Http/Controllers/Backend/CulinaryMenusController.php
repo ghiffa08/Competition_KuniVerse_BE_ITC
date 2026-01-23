@@ -3,14 +3,24 @@
 namespace Modules\Culinary\Http\Controllers\Backend;
 
 use App\Authorizable;
-use App\Http\Controllers\Backend\BackendBaseController;
+use App\Http\Controllers\Controller;
 use Modules\Culinary\Models\Culinary;
 use Modules\Culinary\Models\CulinaryMenu;
 use Illuminate\Http\Request;
 
-class CulinaryMenusController extends BackendBaseController
+class CulinaryMenusController extends Controller
 {
     use Authorizable;
+
+    public $module_title;
+
+    public $module_name;
+
+    public $module_path;
+
+    public $module_icon;
+
+    public $module_model;
 
     public function __construct()
     {

@@ -19,24 +19,23 @@ use Illuminate\Support\Facades\Route;
 *
 * --------------------------------------------------------------------
 */
-Route::middleware('web')->group(function () {
-    Route::get('artikel', [\Modules\Post\Http\Controllers\Frontend\PostsController::class, 'index'])->name('frontend.posts.index');
-    Route::get('artikel/{slug}', [\Modules\Post\Http\Controllers\Frontend\PostsController::class, 'show'])->name('frontend.posts.show');
-});
+Route::group(['namespace' => '\Modules\UMKM\Http\Controllers\Frontend', 'as' => 'frontend.', 'middleware' => 'web', 'prefix' => ''], function () {
+    /*
+     *
+     *  Frontend UMKMS Routes
+     *
+     * ---------------------------------------------------------------------
+     */
+    // Order & Checkout Routes
+    Route::get("umkm/{id}/checkout", "UMKMCheckoutController@checkout")->name("umkms.checkout");
+    Route::get("umkm/search-destination", "UMKMCheckoutController@searchDestination")->name("umkms.search_destination");
+    Route::get("umkm/reverse-geocode", "UMKMCheckoutController@reverseGeocode")->name("umkms.reverse_geocode");
+    Route::post("umkm/check-shipping", "UMKMCheckoutController@checkShipping")->name("umkms.check_shipping");
+    Route::post("umkm/order", "UMKMCheckoutController@store")->name("umkms.store_order");
 
-/*
- *
- *  Frontend Posts Routes (Livewire)
- *
- * ---------------------------------------------------------------------
- */
-/*
-Route::group(['as' => 'frontend.', 'middleware' => 'web'], function () {
-    $module_name = 'posts';
-    Route::get("$module_name", \App\Livewire\Frontend\Artikel\Index::class)->name("$module_name.index");
-    Route::get("$module_name/{slug}", \App\Livewire\Frontend\Artikel\Show::class)->name("$module_name.show");
+    Route::get("umkm", 'UMKMSController@index')->name("umkms.index");
+    Route::get("umkm/{slug}", 'UMKMSController@show')->name("umkms.show");
 });
-*/
 
 /*
 *
@@ -44,7 +43,7 @@ Route::group(['as' => 'frontend.', 'middleware' => 'web'], function () {
 *
 * --------------------------------------------------------------------
 */
-Route::group(['namespace' => '\Modules\Post\Http\Controllers\Backend', 'as' => 'backend.', 'middleware' => ['web', 'auth', 'can:view_backend'], 'prefix' => 'admin'], function () {
+Route::group(['namespace' => '\Modules\UMKM\Http\Controllers\Backend', 'as' => 'backend.', 'middleware' => ['web', 'auth', 'can:view_backend'], 'prefix' => 'admin'], function () {
     /*
     * These routes need view-backend permission
     * (good if you want to allow more than one group in the backend,
@@ -55,12 +54,12 @@ Route::group(['namespace' => '\Modules\Post\Http\Controllers\Backend', 'as' => '
 
     /*
      *
-     *  Backend Posts Routess
+     *  Backend UMKMS Routes
      *
      * ---------------------------------------------------------------------
      */
-    $module_name = 'posts';
-    $controller_name = 'PostsController';
+    $module_name = 'umkms';
+    $controller_name = 'UMKMSController';
     Route::get("$module_name/index_list", ['as' => "$module_name.index_list", 'uses' => "$controller_name@index_list"]);
     Route::get("$module_name/index_data", ['as' => "$module_name.index_data", 'uses' => "$controller_name@index_data"]);
     Route::get("$module_name/trashed", ['as' => "$module_name.trashed", 'uses' => "$controller_name@trashed"]);

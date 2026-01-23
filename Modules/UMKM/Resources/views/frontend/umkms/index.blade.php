@@ -10,23 +10,23 @@
         {{-- HERO --}}
         <div 
             class="xl:col-span-3 h-[280px] md:h-[350px] xl:h-[450px] relative flex items-end rounded-xl overflow-hidden p-4 md:p-10 bg-cover bg-center group"
-            style="background-image: url('https://i.pinimg.com/736x/14/ad/31/14ad3171038b99261210a9fbe6785d41.jpg');"
+            style="background-image: url('https://pdbifiles.nos.jkt-1.neo.id/files/2018/08/05/oskm18_sappk_adriel_595839a1be7662943bad20c349ee8fa2ac09666f.jpg');"
         >
             <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/75 to-black/30 group-hover:via-black/80 transition-all duration-500"></div>
 
             <div class="relative z-10 w-full max-w-3xl">
                 <h6 class="text-prestige-gold font-semibold text-sm md:text-base mb-2 uppercase tracking-wider">
-                    Kategori Artikel
+                    Jelajahi UMKM Kuningan
                 </h6>
 
                 <a href="#" class="block">
                     <h2 class="text-white font-bold text-xl md:text-2xl xl:text-3xl leading-tight hover:text-prestige-gold transition-colors">
-                        Judul Artikel Utama yang Menarik dan Informatif
+                        Produk Lokal Berkualitas, Kebanggaan Daerah
                     </h2>
                 </a>
 
                 <p class="text-gray-200 mt-3 text-sm hidden xl:block line-clamp-2">
-                    Deskripsi singkat artikel utama untuk menarik minat pembaca. Temukan keindahan dan cerita menarik dari Kuningan yang belum pernah Anda ketahui sebelumnya.
+                    Temukan dan dukung produk-produk terbaik dari pelaku UMKM di Kabupaten Kuningan. Dari kuliner lezat hingga kerajinan tangan yang unik.
                 </p>
             </div>
         </div>
@@ -44,15 +44,15 @@
 
     {{-- LIST SECTION --}}
     <section class="container mx-auto mt-10 px-5 mb-20">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"> <!-- Using standard grid instead of custom for responsiveness -->
-            @foreach($posts as $post)
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"> 
+            @foreach($umkms as $umkm)
                 <div class="border border-prestige-gold/30 rounded-2xl p-3 bg-white hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group">
                     <div class="grid gap-4 h-full flex flex-col">
                         {{-- IMAGE --}}
                         <div class="overflow-hidden rounded-xl h-[200px] w-full">
                             <img 
-                                src="{{ $post->image ?? 'https://rsudkertosono.nganjukkab.go.id/web2/assets/images/2f27d1d5b8f3b564af48ff25bce30cd6.jpg' }}" 
-                                alt="{{ $post->name }}" 
+                                src="{{ $umkm->getFirstMediaUrl('cover') ?: 'https://pdbifiles.nos.jkt-1.neo.id/files/2018/08/05/oskm18_sappk_adriel_595839a1be7662943bad20c349ee8fa2ac09666f.jpg' }}" 
+                                alt="{{ $umkm->name }}" 
                                 class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
                             >
                         </div>
@@ -60,27 +60,27 @@
                         {{-- CONTENT --}}
                         <div class="flex flex-col flex-grow">
                             <p class="text-prestige-gold text-xs font-semibold tracking-widest uppercase mb-2">
-                                {{ $post->category->name ?? 'Uncategorized' }}
+                                UMKM Lokal
                             </p>
 
-                            <a href="{{ route('frontend.posts.show', $post->slug) }}" wire:navigate>
+                            <a href="{{ route('frontend.umkms.show', $umkm->slug) }}" wire:navigate>
                                 <h3 class="text-lg font-semibold text-gray-900 mb-2 leading-snug group-hover:text-prestige-gold transition-colors">
-                                    {{ $post->name }}
+                                    {{ $umkm->name }}
                                 </h3>
                             </a>
 
                             <p class="text-gray-600 text-sm leading-relaxed line-clamp-3 mb-4 flex-grow">
-                                {{ Str::limit(strip_tags($post->content), 100) }}
+                                {{ Str::limit(strip_tags($umkm->note), 100) }}
                             </p>
 
                             <div class="flex items-center justify-between text-xs text-gray-400 mt-auto pt-4 border-t border-gray-100">
                                 <div class="flex items-center gap-2">
                                     <span class="material-symbols-outlined text-sm">calendar_today</span>
-                                    <span>{{ $post->created_at->format('d M Y') }}</span>
+                                    <span>{{ $umkm->created_at->format('d M Y') }}</span>
                                 </div>
 
-                                <a href="{{ route('frontend.posts.show', $post->slug) }}" wire:navigate class="flex items-center gap-1 text-prestige-gold font-semibold hover:underline">
-                                    Baca
+                                <a href="{{ route('frontend.umkms.show', $umkm->slug) }}" wire:navigate class="flex items-center gap-1 text-prestige-gold font-semibold hover:underline">
+                                    Detail
                                     <span class="material-symbols-outlined text-sm">arrow_forward</span>
                                 </a>
                             </div>
@@ -92,7 +92,7 @@
 
         {{-- PAGINATION --}}
         <div class="mt-12">
-            {{ $posts->links() }} 
+            {{ $umkms->links() }} 
         </div>
     </section>
 @endsection
