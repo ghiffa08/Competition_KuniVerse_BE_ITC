@@ -63,13 +63,11 @@ class PostsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  string  $slug
      * @return Response
      */
-    public function show($id)
+    public function show($slug)
     {
-        $id = decode_id($id);
-
         $module_title = $this->module_title;
         $module_name = $this->module_name;
         $module_path = $this->module_path;
@@ -79,7 +77,7 @@ class PostsController extends Controller
 
         $module_action = 'Show';
 
-        $$module_name_singular = $module_model::whereId($id)->with('category', 'tags')->first();
+        $$module_name_singular = $module_model::where('slug', $slug)->published()->with('category', 'tags')->firstOrFail();
 
         return view(
             "$module_path.$module_name.show",

@@ -5,6 +5,7 @@
 @endsection
 
 @section("content")
+    <div class="bg-white min-h-screen">
     {{-- HERO & VIDEO SECTION --}}
     <section class="container mx-auto grid xl:grid-cols-4 gap-10 pt-26 px-5 mt-24 mb-10">
         {{-- HERO --}}
@@ -95,4 +96,5 @@
             {{ $posts->links() }} 
         </div>
     </section>
+    </div>
 @endsection

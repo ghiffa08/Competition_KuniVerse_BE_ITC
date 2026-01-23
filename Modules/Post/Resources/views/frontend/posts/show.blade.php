@@ -5,12 +5,12 @@
 @endsection
 
 @section("content")
-    <section class="body-font bg-gray-100 px-6 text-gray-600 sm:px-20 dark:bg-gray-800 dark:text-gray-400">
+    <section class="body-font bg-gray-100 px-6 text-gray-600 sm:px-20">
         <div class="container mx-auto flex flex-col items-center py-8 sm:py-16 md:flex-row">
             <div
                 class="flex flex-col items-center text-center sm:w-4/12 md:items-start md:pr-16 md:text-left lg:flex-grow lg:pr-24"
             >
-                <h1 class="mb-4 text-3xl font-medium text-gray-800 sm:text-4xl dark:text-gray-200">
+                <h1 class="mb-4 text-3xl font-medium text-gray-800 sm:text-4xl">
                     {{ $$module_name_singular->name }}
                 </h1>
                 @if ($$module_name_singular->intro != "")
@@ -31,7 +31,7 @@
         </div>
     </section>
 
-    <section class="px-6 py-6 sm:px-20 sm:py-10 dark:bg-gray-700 dark:text-gray-300">
+    <section class="bg-white px-6 py-6 text-gray-800 sm:px-20 sm:py-10">
         <div class="container mx-auto flex flex-col md:flex-row">
             <div class="flex flex-col sm:w-8/12 sm:pr-8 lg:flex-grow">
                 <div class="pb-5">
@@ -96,7 +96,7 @@
                             @endphp
 
                             <button
-                                class="tooltip m-2 rounded-sm border border-gray-400 p-2 transition duration-300 ease-out hover:border-gray-600 hover:bg-gray-100 hover:shadow-lg dark:hover:bg-gray-600 dark:hover:text-gray-200"
+                                class="tooltip m-2 rounded-sm border border-gray-400 p-2 transition duration-300 ease-out hover:border-gray-600 hover:bg-gray-100 hover:shadow-lg"
                                 data-title="Share on Twitter"
                                 data-placement="top"
                                 data-sharer="twitter"
@@ -123,7 +123,7 @@
                             </button>
 
                             <button
-                                class="tooltip m-2 rounded-sm border border-gray-400 p-2 transition duration-300 ease-out hover:border-gray-600 hover:bg-gray-100 hover:shadow-lg dark:hover:bg-gray-600 dark:hover:text-gray-200"
+                                class="tooltip m-2 rounded-sm border border-gray-400 p-2 transition duration-300 ease-out hover:border-gray-600 hover:bg-gray-100 hover:shadow-lg"
                                 data-title="Share on Facebook"
                                 data-placement="top"
                                 data-sharer="facebook"

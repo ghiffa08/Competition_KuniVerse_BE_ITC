@@ -5,6 +5,7 @@
 @endsection
 
 @section("content")
+<div class="min-h-screen bg-white">
 <div class="container mx-auto pt-32 xl:px-20 md:px-5 px-3 mb-20 font-sans text-gray-800">
     <div class="grid xl:grid-cols-4 gap-10">
         
@@ -109,5 +110,6 @@
         </div>
 
     </div>
+</div>
 </div>
 @endsection
