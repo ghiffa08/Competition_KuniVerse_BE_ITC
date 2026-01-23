@@ -47,8 +47,8 @@ Route::get('privacy', Privacy::class)->name('privacy');
 
 // Menu Routes
 // Menu Routes (Wisata will be handled by Tourism module)
-Route::get('kuliner', Home::class)->name('kuliner');
-Route::get('umkm', Home::class)->name('umkm');
+// Route::get('kuliner', Home::class)->name('kuliner');
+// Route::get('umkm', Home::class)->name('umkm');
 Route::get('posts', ArtikelIndex::class)->name('posts');
 // Route::get('artikel', ArtikelIndex::class)->name('artikel');
 
